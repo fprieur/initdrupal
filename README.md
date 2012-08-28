@@ -1,0 +1,1 @@
+python script for a quick drupal local start
