@@ -18,23 +18,28 @@ class initDrupal(object):
 			self.user = sys.argv[1]
 			self.password = sys.argv[2]
 			self.dbAndDirectoryName = sys.argv[3]
-			print sys.argv[1] + " " + sys.argv[2] + " " + sys.argv[3]
 		else:
 			print "un des trois argument obligatoire est manquants"
-	def test2(self):
-		print self.user + " " + self.password + " " + self.dbAndDirectoryName
-
+	
 	def createDatabase(self):
 		os.system("mysqladmin -u root --password=root create "+self.dbAndDirectoryName+";")
+		print "==== la base de données "+self.dbAndDirectoryName+" a été crée avec succès"
 
 	def downloadDrupal(self):
 		os.system("mkdir /Applications/MAMP/htdocs/"+self.dbAndDirectoryName)
+		print "==== le dossier "+self.dbAndDirectoryName+" a été crée avec succès"
+
 		os.chdir(r"/Applications/MAMP/htdocs/"+self.dbAndDirectoryName)
 		#download drush in directory
 		subprocess.call("drush dl", shell=True)
-		os.chdir(r"/Applications/MAMP/htdocs/"+self.dbAndDirectoryName+"/drupal-7.15")
+		print "==== le core drupal a été downloadé avec succès"
+
+		subprocess.call("mv drupal*/* ./", shell=True) #move all file out of default install directory
+		subprocess.call("rm -rf drupal*/", shell=True) #remove default install directory
 		#install basic site
-		subprocess.call("drush site-install standard --account-name="+self.user+" --account-pass="+self.password+" --db-url=mysql://"+self.user+":"+self.password+"@localhost/"+self.dbAndDirectoryName, shell=True)
+		subprocess.call("drush site-install -y standard --account-name="+self.user+" --account-pass="+self.password+" --db-url=mysql://"+self.user+":"+self.password+"@localhost/"+self.dbAndDirectoryName, shell=True)
+		print "==== le site local drupal a été créé avec succès"
+		subprocess.call("open -a /Applications/Google\ Chrome.app 'http://localhost:8888/'"+self.dbAndDirectoryName+"", shell=True) #open site in chrome
 
 initD = initDrupal()
 initD.fetchArguments()
