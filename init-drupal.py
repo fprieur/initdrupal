@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os, sys
+import os, sys, subprocess
 
 class initDrupal(object):
 
@@ -12,7 +12,7 @@ class initDrupal(object):
 
 	def dbAndDirectoryName(self):
 		self.dbAndDirectoryName = ""
-		
+
 	def fetchArguments(self):
 		if len(sys.argv) == 4:
 			self.user = sys.argv[1]
@@ -30,7 +30,11 @@ class initDrupal(object):
 	def downloadDrupal(self):
 		os.system("mkdir /Applications/MAMP/htdocs/"+self.dbAndDirectoryName)
 		os.chdir(r"/Applications/MAMP/htdocs/"+self.dbAndDirectoryName)
-		os.system("drush dl")
+		#download drush in directory
+		subprocess.call("drush dl", shell=True)
+		os.chdir(r"/Applications/MAMP/htdocs/"+self.dbAndDirectoryName+"/drupal-7.15")
+		#install basic site
+		subprocess.call("drush site-install standard --account-name="+self.user+" --account-pass="+self.password+" --db-url=mysql://"+self.user+":"+self.password+"@localhost/"+self.dbAndDirectoryName, shell=True)
 
 initD = initDrupal()
 initD.fetchArguments()
