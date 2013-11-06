@@ -38,7 +38,7 @@ class initDrupal(object):
 		subprocess.call("rm -rf drupal*/", shell=True) #remove default install directory
 
         #install basic site
-		subprocess.call("drush site-install -y standard --account-mail=fprieur@allo.com --account-name="+self.user+" --account-pass="+self.password+" --site-name=bonjour --site-mail=fred@allo.com local=gb  --db-url=mysql://root:root@localhost/"+self.dbAndDirectoryName, shell=True)
+		subprocess.call("drush site-install -y standard --account-mail=fprieur@allo.com --account-name="+self.user+" --account-pass="+self.password+" --site-name="+self.dbAndDirectoryName+" --site-mail=fred@allo.com local=gb  --db-url=mysql://root:root@localhost/"+self.dbAndDirectoryName, shell=True)
 		print "==== le site local drupal a été créé avec succès"
 
 initD = initDrupal()
